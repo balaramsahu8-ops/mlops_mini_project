@@ -20,7 +20,7 @@ import dagshub
 
 # Set up MLflow tracking URI
 mlflow.set_tracking_uri('https://dagshub.com/balaram.sahu8/mlops_mini_project.mlflow')
-dagshub.init(repo_owner='campusx-official', repo_name='mlops-mini-project', mlflow=True)
+dagshub.init(repo_owner='balaram.sahu8', repo_name='mlops_mini_project', mlflow=True)
 
 
 # logging configuration

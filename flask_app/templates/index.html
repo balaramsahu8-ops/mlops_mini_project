@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Sentiment Analysis</title>
+        <style>
+            body { background-color: brown; color: white; font-family: Arial; }
+            .result { margin-top: 20px; padding: 20px; background-color: rgba(0,0,0,0.3); border-radius: 5px; }
+            .happy { color: #90EE90; }
+            .sad { color: #FF6B6B; }
+            .probability { margin-top: 10px; font-size: 14px; }
+        </style>
+    </head>
+
+    <body>
+        <h1>Sentiment Analysis</h1>
+        <form action="/predict" method="POST">
+            <label>Write text:</label><br>
+            <textarea name="text" rows="10" cols="40"></textarea><br>
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if result is not none %}
+            <div class="result">
+                {% if result == 1 %}
+                    <h2 class="happy">😊 Happy</h2>
+                {% else %}
+                    <h2 class="sad">😢 Sad</h2>
+                {% endif %}
+                
+                {% if sad_proba and happy_proba %}
+                    <div class="probability">
+                        <p><strong>Confidence Scores:</strong></p>
+                        <p>Sad: {{ sad_proba }}</p>
+                        <p>Happy: {{ happy_proba }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </body>
+</html>
