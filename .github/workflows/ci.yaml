@@ -50,6 +50,5 @@ jobs:
         if: success()
         env:
           DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
-        run: python scripts/promote_model.py
+        run: python scripts/promote_model.py      
 
-      
