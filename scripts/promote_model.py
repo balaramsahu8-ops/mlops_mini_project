@@ -12,7 +12,7 @@ def promote_model():
 
     dagshub_url = "https://dagshub.com"
     repo_owner = "balaram.sahu8"
-    repo_name = "mlops-mini-project"
+    repo_name = "mlops_mini_project"
 
     # Set up MLflow tracking URI
     mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
@@ -20,11 +20,15 @@ def promote_model():
     client = mlflow.MlflowClient()
 
     model_name = "my_model"
+
     # Get the latest version in staging
-    latest_version_staging = client.get_latest_versions(model_name, stages=["Staging"])[0].version
+    staging_versions = client.search_model_versions(f"name='{model_name}' and current_stage='Staging'")
+    if not staging_versions:
+        raise ValueError(f"No staging versions found for model '{model_name}'")
+    latest_version_staging = max(int(v.version) for v in staging_versions)
 
     # Archive the current production model
-    prod_versions = client.get_latest_versions(model_name, stages=["Production"])
+    prod_versions = client.search_model_versions(f"name='{model_name}' and current_stage='Production'")
     for version in prod_versions:
         client.transition_model_version_stage(
             name=model_name,
