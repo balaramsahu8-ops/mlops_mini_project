@@ -22,13 +22,14 @@ def promote_model():
     model_name = "my_model"
 
     # Get the latest version in staging
-    staging_versions = client.search_model_versions(f"name='{model_name}' and current_stage='Staging'")
+    all_versions = client.search_model_versions(f"name='{model_name}'")
+    staging_versions = [v for v in all_versions if v.current_stage == 'Staging']
     if not staging_versions:
         raise ValueError(f"No staging versions found for model '{model_name}'")
     latest_version_staging = max(int(v.version) for v in staging_versions)
 
     # Archive the current production model
-    prod_versions = client.search_model_versions(f"name='{model_name}' and current_stage='Production'")
+    prod_versions = [v for v in all_versions if v.current_stage == 'Production']
     for version in prod_versions:
         client.transition_model_version_stage(
             name=model_name,
