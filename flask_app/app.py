@@ -111,7 +111,11 @@ if model_version is None:
 else:
     model_uri = f'models:/{model_name}/{model_version}'
     try:
-        model = mlflow.pyfunc.load_model(model_uri)
+        # Download the model artifact (pickle file) from the registry
+        artifact_path = mlflow.artifacts.download_artifacts(model_uri, dst_path='tmp_model')
+        # Load the sklearn model from the downloaded pickle
+        with open(os.path.join('tmp_model', os.path.basename(artifact_path)), 'rb') as f:
+            model = pickle.load(f)
     except Exception as e:
         print(f"Error loading model: {e}")
         model = None
